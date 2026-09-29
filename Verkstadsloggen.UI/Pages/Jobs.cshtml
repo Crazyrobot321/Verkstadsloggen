@@ -1,0 +1,16 @@
+﻿@page
+@model Verkstadsloggen.UI.Pages.JobsModel
+@{
+    ViewData["Title"] = "Jobs";
+}
+
+<form method="post">
+    <div class="mb-2">
+        <input asp-for="Title" class="form-control" placeholder="Enter job title" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="mb-2">
+        <textarea asp-for="Description" class="form-control" placeholder="Enter job description"> </textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

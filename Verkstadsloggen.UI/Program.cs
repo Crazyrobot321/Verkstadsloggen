@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Verkstadsloggen.Infrastructure;
+using Verkstadsloggen.Infrastructure.Data;
+using Verkstadsloggen.Infrastructure.Interface;
+
 namespace Verkstadsloggen.UI
 {
     public class Program
@@ -9,7 +14,14 @@ namespace Verkstadsloggen.UI
             // Add services to the container.
             builder.Services.AddRazorPages();
 
+            builder.Services.AddScoped<IJobRepository, JobRepository>();
+
+            builder.Services.AddDbContext<MyDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             var app = builder.Build();
+
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
