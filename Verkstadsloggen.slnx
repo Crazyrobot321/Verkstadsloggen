@@ -2,5 +2,6 @@
   <Project Path="Verkstadsloggen.Application/Verkstadsloggen.Application.csproj" />
   <Project Path="Verkstadsloggen.Domain/Verkstadsloggen.Domain.csproj" />
   <Project Path="Verkstadsloggen.Infrastructure/Verkstadsloggen.Infrastructure.csproj" />
+  <Project Path="Verkstadsloggen.Tests/Verkstadsloggen.Tests.csproj" />
   <Project Path="Verkstadsloggen.UI/Verkstadsloggen.UI.csproj" />
 </Solution>
