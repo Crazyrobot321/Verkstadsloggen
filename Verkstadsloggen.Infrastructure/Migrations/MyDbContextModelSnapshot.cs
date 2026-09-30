@@ -22,6 +22,29 @@ namespace Verkstadsloggen.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.Job", b =>
                 {
                     b.Property<Guid>("Id")
@@ -42,6 +65,22 @@ namespace Verkstadsloggen.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Jobs");
+                });
+
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Comment", b =>
+                {
+                    b.HasOne("Verkstadsloggen.Domain.Models.Job", "Job")
+                        .WithMany("Comments")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Job", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,6 +16,7 @@ namespace Verkstadsloggen.Domain.Models
         public string Description { get; set; } = string.Empty;
         [Required]
         public JobStatus Status { get; set; }
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     }
 }

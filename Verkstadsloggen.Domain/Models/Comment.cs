@@ -18,5 +18,7 @@ namespace Verkstadsloggen.Domain.Models
 
         [Required]
         public Guid JobId { get; set; }
+
+        public Job Job { get; set; } = null!;
     }
 }
