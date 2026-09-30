@@ -24,5 +24,9 @@ namespace Verkstadsloggen.Infrastructure
         {
             return await _context.Jobs.ToListAsync();
         }
+        public async Task<Job> GetJobByIdAsync(Guid id)
+        {
+            return await _context.Jobs.FindAsync(id);
+        }
     }
 }
