@@ -16,6 +16,16 @@ namespace Verkstadsloggen.Domain.Models
         public string Description { get; set; } = string.Empty;
         [Required]
         public JobStatus Status { get; set; }
+        public string Notes { get; set; } = string.Empty;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public string LicensePlate { get; set; } = string.Empty;
+
+        public Guid? CustomerId { get; set; }
+        public Customer? Customer { get; set; }
+
+        public Guid? MechanicId { get; set; }
+        public Mechanic? Mechanic { get; set; }
 
     }
 }
