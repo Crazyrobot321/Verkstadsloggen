@@ -9,6 +9,7 @@ namespace Verkstadsloggen.Infrastructure.Data
     public class MyDbContext : DbContext
     {
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
             
