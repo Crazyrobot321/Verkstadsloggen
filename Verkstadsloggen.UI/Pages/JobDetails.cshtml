@@ -1,0 +1,26 @@
+﻿@page "{id:guid}"
+@model Verkstadsloggen.UI.Pages.JobDetails
+
+<h1>Jobbdetaljer</h1>
+
+@if (Model.Job != null)
+{
+    <div>
+        <h2>@Model.Job.Title</h2>
+
+        <p>
+            <strong>Beskrivning:</strong>
+            @Model.Job.Description
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            @Model.Job.Status
+        </p>
+
+        <p>
+            <strong>ID:</strong>
+            @Model.Job.Id
+        </p>
+    </div>
+}
