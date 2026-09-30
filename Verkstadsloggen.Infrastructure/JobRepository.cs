@@ -33,5 +33,9 @@ namespace Verkstadsloggen.Infrastructure
         }
 
 
+        public async Task<Job> GetJobByIdAsync(Guid id)
+        {
+            return await _context.Jobs.FindAsync(id);
+        }
     }
 }
