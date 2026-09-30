@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Verkstadsloggen.Domain.Enum;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Infrastructure.Data;
 using Verkstadsloggen.Infrastructure.Interface;
@@ -24,5 +25,13 @@ namespace Verkstadsloggen.Infrastructure
         {
             return await _context.Jobs.ToListAsync();
         }
+        public async Task<List<Job>> GetJobsByStatusAsync(JobStatus status)
+        {
+            return await _context.Jobs
+                .Where(j => j.Status == status)
+                .ToListAsync();
+        }
+
+
     }
 }
