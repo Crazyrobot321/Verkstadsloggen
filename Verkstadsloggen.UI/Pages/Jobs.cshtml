@@ -14,3 +14,20 @@
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+
+@if (Model.jobs.Count > 0)
+{
+    <h2>Job List</h2>
+    <ul class="list-group">
+        @foreach (var job in Model.jobs)
+        {
+            <li class="list-group-item">
+                <h5>@job.Title</h5>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No jobs available.</p>
+}
