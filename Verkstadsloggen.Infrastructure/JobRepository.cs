@@ -26,7 +26,14 @@ namespace Verkstadsloggen.Infrastructure
         }
         public async Task<Job> GetJobByIdAsync(Guid id)
         {
-            return await _context.Jobs.FindAsync(id);
+            return await _context.Jobs
+                .Include(j => j.Comments)
+                .FirstOrDefaultAsync(j => j.Id == id);
+        }
+        public async Task AddCommentAsync(Comment comment)
+        {
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
         }
     }
 }

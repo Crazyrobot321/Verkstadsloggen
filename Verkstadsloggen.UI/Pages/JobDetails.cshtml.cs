@@ -15,6 +15,9 @@ public class JobDetails : PageModel
     }
 
     public Job? Job { get; set; }
+    
+    [BindProperty]
+    public string NewComment { get; set; } = string.Empty;
 
     public async Task<IActionResult> OnGetAsync(Guid id)
     {
@@ -26,5 +29,22 @@ public class JobDetails : PageModel
         }
 
         return Page();
+    }
+    public async Task <IActionResult> OnPostAddCommentAsync(Guid id)
+    {
+        var job = await _jobRepository.GetJobByIdAsync(id);
+
+        if (job == null)
+        {
+            return NotFound();
+        }
+
+        var comment = new Comment
+        {
+            Text = NewComment,
+            JobId = job.Id
+        };
+        await _jobRepository.AddCommentAsync(comment);
+        return RedirectToPage(new {id});
     }
 }
