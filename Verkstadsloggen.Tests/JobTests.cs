@@ -52,5 +52,54 @@ public class JobTests
         Assert.Contains(job1, allJobs);
         Assert.Contains(job2, allJobs);
     }
+    [Fact]
+    public void GetJobById_ReturnsCorrectJob()
+    {
+        // Arrange
+        var job1 = new Job
+        {
+            Title = "Bromsbyte",
+            Description = "Byte av bromsar fram",
+            Status = JobStatus.NotStarted
+        };
+
+        var job2 = new Job
+        {
+            Title = "Oljebyte",
+            Description = "Byte av motorolja",
+            Status = JobStatus.InProgress
+        };
+        
+        var jobs = new List<Job> { job1, job2 };
+
+        // Act
+        var job = jobs.FirstOrDefault(j => j.Id == job1.Id);
+
+        // Assert
+        Assert.NotNull(job);
+        Assert.Equal(job1.Id, job.Id);
+        Assert.Equal("Bromsbyte", job.Title);
+        Assert.Equal("Byte av bromsar fram", job.Description);
+        Assert.Equal(JobStatus.NotStarted, job.Status);
+    }
+    [Fact]
+    public void GetJobById_WhenJobDoesNotExist_ReturnsNull()
+    {
+        // Arrange
+        var job = new Job
+        {
+            Title = "Bromsbyte",
+            Description = "Byte av bromsar fram",
+            Status = JobStatus.NotStarted
+        };
+        var jobs = new List<Job> { job };
+        var id = Guid.NewGuid();
+
+        // Act
+        var result = jobs.FirstOrDefault(j => j.Id == id);
+
+        // Assert
+        Assert.Null(result);
+    }
 
 }
