@@ -24,8 +24,8 @@ namespace Verkstadsloggen.Infrastructure
         public async Task<List<Job>> GetAllJobsAsync()
         {
             return await _context.Jobs
-                .Include(j => j.Mechanic) // Include the related Mechanic entity
-                .OrderByDescending(j => j.CreatedAt) // Order by CreatedAt in descending order
+                .Include(j => j.Mechanic)
+                .OrderByDescending(j => j.CreatedAt)
                 .ToListAsync();
         }
         public async Task<List<Job>> GetJobsByStatusAsync(JobStatus status)
@@ -41,6 +41,12 @@ namespace Verkstadsloggen.Infrastructure
             return await _context.Jobs
                 .Include(j => j.Mechanic)
                 .FirstOrDefaultAsync(j => j.Id == id);
+        }
+        public async Task<Job> UpdateJobByIdAsync(Job job) 
+        {
+            _context.Jobs.Update(job);
+            await _context.SaveChangesAsync();
+            return job;
         }
     }
 }
