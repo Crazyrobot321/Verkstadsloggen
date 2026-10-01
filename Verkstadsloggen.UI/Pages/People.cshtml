@@ -1,8 +1,48 @@
 ﻿@page
 @model Verkstadsloggen.UI.Pages.PeopleModel
 
+}
+
 @{
     ViewData["Title"] = "Personer";
 }
 
 <h1>Personer</h1>
+
+<form method="post">
+
+    <div class="mb-2">
+        <input asp-for="FirstName"
+               class="form-control"
+               placeholder="Förnamn" />
+    </div>
+
+    <div class="mb-2">
+        <input asp-for="LastName"
+               class="form-control"
+               placeholder="Efternamn" />
+    </div>
+    
+    <div class="mb-2">
+        <input asp-for="Address"
+               class="form-control"
+               placeholder="Adress" />
+    </div>
+
+    <div class="mb-2">
+        <input asp-for="Email"
+               class="form-control"
+               placeholder="Email" />
+    </div>
+
+    <div class="mb-2">
+        <input asp-for="PhoneNumber"
+               class="form-control"
+               placeholder="Telefonnummer" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Lägg till
+    </button>
+
+</form>
