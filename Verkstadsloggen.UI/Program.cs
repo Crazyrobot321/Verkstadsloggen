@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Verkstadsloggen.Infrastructure;
 using Verkstadsloggen.Infrastructure.Data;
 using Verkstadsloggen.Infrastructure.Interface;
+using Verkstadsloggen.Application;
 
 namespace Verkstadsloggen.UI
 {
@@ -15,6 +16,10 @@ namespace Verkstadsloggen.UI
             builder.Services.AddRazorPages();
 
             builder.Services.AddScoped<IJobRepository, JobRepository>();
+            builder.Services.AddScoped<ITimeLogRepository, TimeLogRepository>();
+
+            builder.Services.AddScoped<TimeLogService>();
+
 
             builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
