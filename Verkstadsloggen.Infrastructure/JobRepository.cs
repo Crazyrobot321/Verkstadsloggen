@@ -39,6 +39,7 @@ namespace Verkstadsloggen.Infrastructure
         public async Task<Job?> GetJobByIdAsync(Guid id)
         {
             return await _context.Jobs
+<<<<<<< HEAD
                 .Include(j => j.Mechanic)
                 .FirstOrDefaultAsync(j => j.Id == id);
         }
@@ -47,6 +48,15 @@ namespace Verkstadsloggen.Infrastructure
             _context.Jobs.Update(job);
             await _context.SaveChangesAsync();
             return job;
+=======
+                .Include(j => j.Comments)
+                .FirstOrDefaultAsync(j => j.Id == id);
+        }
+        public async Task AddCommentAsync(Comment comment)
+        {
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+>>>>>>> origin/main
         }
     }
 }
