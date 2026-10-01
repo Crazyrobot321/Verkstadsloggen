@@ -22,5 +22,35 @@
             <strong>ID:</strong>
             @Model.Job.Id
         </p>
+        <hr />
+
+        <h3>Kommentarer</h3>
+
+        @if (Model.Job.Comments.Any())
+        {
+            foreach (var comment in Model.Job.Comments.OrderByDescending(c => c.CreatedAt))
+            {
+                <div class="border rounded p-2 mb-2">
+                    <p class="mb-1">@comment.Text</p>
+                    <small class="text-muted">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Inga kommentarer ännu.</p>
+        }
+
+        <form method="post" asp-page-handler="AddComment">
+            <div class="mb-2">
+                <textarea asp-for="NewComment"
+                          class="form-control"
+                          placeholder="Skriv en kommentar..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Lägg till
+            </button>
+        </form>
     </div>
 }
