@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Verkstadsloggen.Infrastructure;
 using Verkstadsloggen.Infrastructure.Data;
 using Verkstadsloggen.Infrastructure.Interface;
-using Verkstadsloggen.Application.Services;
+using Verkstadsloggen.Application;
 
 namespace Verkstadsloggen.UI
 {
