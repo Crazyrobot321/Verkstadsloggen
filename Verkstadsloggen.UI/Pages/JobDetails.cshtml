@@ -22,5 +22,10 @@
             <strong>ID:</strong>
             @Model.Job.Id
         </p>
+        
+        <p>
+            <strong>Mekaniker:</strong>
+            @Model.Job.Mechanic?.FirstName @Model.Job.Mechanic?.LastName
+        </p>
     </div>
 }
