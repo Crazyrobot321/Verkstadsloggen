@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Verkstadsloggen.Domain.Enum;
 using Verkstadsloggen.Domain.Models;
@@ -16,8 +16,12 @@ public class JobDetails : PageModel
     }
 
     public Job? Job { get; set; }
+
     [BindProperty]
     public JobStatus NewStatus { get; set; }
+
+    [BindProperty]
+    public string NewComment { get; set; } = string.Empty;
 
     public async Task<IActionResult> OnGetAsync(Guid id)
     {
@@ -27,6 +31,7 @@ public class JobDetails : PageModel
         {
             return NotFound();
         }
+
         NewStatus = Job.Status;
         return Page();
     }
@@ -34,12 +39,35 @@ public class JobDetails : PageModel
     public async Task<IActionResult> OnPostUpdateStatusAsync(Guid id)
     {
         Job = await _jobRepository.GetJobByIdAsync(id);
+
         if (Job == null)
         {
             return NotFound();
         }
+
         Job.Status = NewStatus;
         await _jobRepository.UpdateJobByIdAsync(Job);
         return RedirectToPage("/Jobs");
+    }
+
+    public async Task<IActionResult> OnPostAddCommentAsync(Guid id)
+    {
+        var job = await _jobRepository.GetJobByIdAsync(id);
+
+        if (job == null)
+        {
+            return NotFound();
+        }
+
+        if (!string.IsNullOrWhiteSpace(NewComment))
+        {
+            await _jobRepository.AddCommentAsync(new Comment
+            {
+                Text = NewComment.Trim(),
+                JobId = job.Id
+            });
+        }
+
+        return RedirectToPage(new { id });
     }
 }

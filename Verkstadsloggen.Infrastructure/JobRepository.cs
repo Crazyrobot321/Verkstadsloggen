@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,19 +34,23 @@ namespace Verkstadsloggen.Infrastructure
                 .Where(j => j.Status == status)
                 .ToListAsync();
         }
-
-
         public async Task<Job?> GetJobByIdAsync(Guid id)
         {
             return await _context.Jobs
                 .Include(j => j.Mechanic)
+                .Include(j => j.Comments)
                 .FirstOrDefaultAsync(j => j.Id == id);
         }
-        public async Task<Job> UpdateJobByIdAsync(Job job) 
+        public async Task<Job> UpdateJobByIdAsync(Job job)
         {
             _context.Jobs.Update(job);
             await _context.SaveChangesAsync();
             return job;
+        }
+        public async Task AddCommentAsync(Comment comment)
+        {
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
         }
     }
 }

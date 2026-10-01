@@ -1,4 +1,4 @@
-﻿using Verkstadsloggen.Domain.Models;
+using Verkstadsloggen.Domain.Models;
 
 namespace Verkstadsloggen.Infrastructure.Interface
 {
@@ -8,5 +8,6 @@ namespace Verkstadsloggen.Infrastructure.Interface
         Task<List<Job>> GetAllJobsAsync();
         Task<Job?> GetJobByIdAsync(Guid id);
         Task<Job> UpdateJobByIdAsync(Job job);
+        Task AddCommentAsync(Comment comment);
     }
 }

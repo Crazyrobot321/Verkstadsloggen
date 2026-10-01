@@ -1,4 +1,4 @@
-﻿@page "{id:guid}"
+@page "{id:guid}"
 @using Verkstadsloggen.Domain.Enum
 @model Verkstadsloggen.UI.Pages.JobDetails
 
@@ -23,19 +23,52 @@
             <strong>ID:</strong>
             @Model.Job.Id
         </p>
-        
+
         <p>
             <strong>Mekaniker:</strong>
             @Model.Job.Mechanic?.FirstName @Model.Job.Mechanic?.LastName
         </p>
-    </div>
-    <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@Model.Job.Id" class="d-flex gap-2 mb-3">
-        <select asp-for="NewStatus" class="form-select w-auto">
-            @foreach (var s in Enum.GetValues<JobStatus>())
+
+        <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@Model.Job.Id" class="d-flex gap-2 mb-3">
+            <select asp-for="NewStatus" class="form-select w-auto">
+                @foreach (var s in Enum.GetValues<JobStatus>())
+                {
+                    <option value="@s">@s</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">Uppdatera status</button>
+        </form>
+
+        <hr />
+
+        <h3>Kommentarer</h3>
+
+        @if (Model.Job.Comments.Any())
+        {
+            foreach (var comment in Model.Job.Comments.OrderByDescending(c => c.CreatedAt))
             {
-                <option value="@s">@s</option>
+                <div class="border rounded p-2 mb-2">
+                    <p class="mb-1">@comment.Text</p>
+                    <small class="text-muted">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                </div>
             }
-        </select>
-        <button type="submit" class="btn btn-primary">Uppdatera status</button>
-    </form>
+        }
+        else
+        {
+            <p>Inga kommentarer ännu.</p>
+        }
+
+        <form method="post" asp-page-handler="AddComment" asp-route-id="@Model.Job.Id">
+            <div class="mb-2">
+                <textarea asp-for="NewComment"
+                          class="form-control"
+                          placeholder="Skriv en kommentar..."
+                          required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Lägg till
+            </button>
+        </form>
+    </div>
 }
