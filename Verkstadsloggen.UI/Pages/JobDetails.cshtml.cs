@@ -16,14 +16,11 @@ public class JobDetails : PageModel
     }
 
     public Job? Job { get; set; }
-<<<<<<< HEAD
     [BindProperty]
     public JobStatus NewStatus { get; set; }
-=======
     
     [BindProperty]
     public string NewComment { get; set; } = string.Empty;
->>>>>>> origin/main
 
     public async Task<IActionResult> OnGetAsync(Guid id)
     {
@@ -36,7 +33,6 @@ public class JobDetails : PageModel
         NewStatus = Job.Status;
         return Page();
     }
-<<<<<<< HEAD
 
     public async Task<IActionResult> OnPostUpdateStatusAsync(Guid id)
     {
@@ -48,7 +44,7 @@ public class JobDetails : PageModel
         Job.Status = NewStatus;
         await _jobRepository.UpdateJobByIdAsync(Job);
         return RedirectToPage("/Jobs");
-=======
+    }
     public async Task <IActionResult> OnPostAddCommentAsync(Guid id)
     {
         var job = await _jobRepository.GetJobByIdAsync(id);
@@ -69,6 +65,5 @@ public class JobDetails : PageModel
         };
         await _jobRepository.AddCommentAsync(comment);
         return RedirectToPage(new {id});
->>>>>>> origin/main
     }
 }

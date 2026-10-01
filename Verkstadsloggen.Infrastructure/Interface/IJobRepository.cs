@@ -6,12 +6,8 @@ namespace Verkstadsloggen.Infrastructure.Interface
     {
         Task AddJobAsync(Job job);
         Task<List<Job>> GetAllJobsAsync();
-<<<<<<< HEAD
         Task<Job?> GetJobByIdAsync(Guid id);
-        Task<Job> UpdateJobByIdAsync(Job job);
-=======
-        Task<Job> GetJobByIdAsync(Guid id);
+        Task<Job?> UpdateJobByIdAsync(Job job);
         Task AddCommentAsync(Comment comment);
->>>>>>> origin/main
     }
 }

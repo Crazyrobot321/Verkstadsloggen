@@ -23,13 +23,12 @@
             <strong>ID:</strong>
             @Model.Job.Id
         </p>
-<<<<<<< HEAD
         
         <p>
             <strong>Mekaniker:</strong>
             @Model.Job.Mechanic?.FirstName @Model.Job.Mechanic?.LastName
         </p>
-=======
+
         <hr />
 
         <h3>Kommentarer</h3>
@@ -60,7 +59,6 @@
                 Lägg till
             </button>
         </form>
->>>>>>> origin/main
     </div>
     <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@Model.Job.Id" class="d-flex gap-2 mb-3">
         <select asp-for="NewStatus" class="form-select w-auto">

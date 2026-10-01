@@ -39,24 +39,23 @@ namespace Verkstadsloggen.Infrastructure
         public async Task<Job?> GetJobByIdAsync(Guid id)
         {
             return await _context.Jobs
-<<<<<<< HEAD
                 .Include(j => j.Mechanic)
                 .FirstOrDefaultAsync(j => j.Id == id);
         }
-        public async Task<Job> UpdateJobByIdAsync(Job job) 
+        public async Task<Job?> UpdateJobByIdAsync(Job job) 
         {
             _context.Jobs.Update(job);
             await _context.SaveChangesAsync();
-            return job;
-=======
+
+            return await _context.Jobs
                 .Include(j => j.Comments)
-                .FirstOrDefaultAsync(j => j.Id == id);
+                .Include(j => j.Mechanic)
+                .FirstOrDefaultAsync(j => j.Id == job.Id);
         }
         public async Task AddCommentAsync(Comment comment)
         {
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
->>>>>>> origin/main
         }
     }
 }
