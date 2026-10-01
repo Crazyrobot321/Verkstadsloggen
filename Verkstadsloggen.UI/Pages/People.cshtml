@@ -1,8 +1,6 @@
 ﻿@page
 @model Verkstadsloggen.UI.Pages.PeopleModel
 
-}
-
 @{
     ViewData["Title"] = "Personer";
 }
@@ -46,3 +44,25 @@
     </button>
 
 </form>
+
+@if (Model.People.Count > 0)
+{
+    <h2>Personer</h2>
+
+    <ul class="list-group">
+        @foreach (var person in Model.People)
+        {
+            <li class="list-group-item">
+                <strong>@person.FirstName @person.LastName</strong>
+                <br />
+                @person.Email
+                <br />
+                @person.PhoneNumber
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Inga personer finns.</p>
+}
