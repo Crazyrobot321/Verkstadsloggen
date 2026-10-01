@@ -14,7 +14,7 @@ namespace Verkstadsloggen.Domain.Models
         public string Text { get; set; } = string.Empty;
 
         [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
         public Guid JobId { get; set; }

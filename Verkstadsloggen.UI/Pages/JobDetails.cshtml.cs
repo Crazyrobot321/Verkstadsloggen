@@ -38,6 +38,10 @@ public class JobDetails : PageModel
         {
             return NotFound();
         }
+        if (string.IsNullOrWhiteSpace(NewComment))
+        {
+            return Page();
+        }
 
         var comment = new Comment
         {

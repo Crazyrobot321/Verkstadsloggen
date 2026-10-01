@@ -97,6 +97,7 @@ namespace Verkstadsloggen.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Job");
+                });
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.Person", b =>
                 {
                     b.Property<Guid>("Id")
