@@ -36,6 +36,7 @@ namespace Verkstadsloggen.UI.Pages
         {
             if (!ModelState.IsValid)
             {
+                await LoadAsync();
                 return Page();
             }
             var job = new Job
