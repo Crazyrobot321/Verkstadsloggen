@@ -33,5 +33,8 @@ namespace Verkstadsloggen.Domain.Models
 
         public Guid? MechanicId { get; set; }
         public Mechanic? Mechanic { get; set; }
+
+        public List<TimeLog> TimeLogs { get; set; } = new();
+
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Verkstadsloggen.Infrastructure;
 using Verkstadsloggen.Infrastructure.Data;
 using Verkstadsloggen.Infrastructure.Interface;
+using Verkstadsloggen.Application;
 
 namespace Verkstadsloggen.UI
 {
@@ -16,6 +17,11 @@ namespace Verkstadsloggen.UI
             //Register the repositories with dependency injection
             builder.Services.AddScoped<IMechanicRepository, MechanicRepository>();
             builder.Services.AddScoped<IJobRepository, JobRepository>();
+            builder.Services.AddScoped<ITimeLogRepository, TimeLogRepository>();
+
+            builder.Services.AddScoped<TimeLogService>();
+
+
             builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 
             builder.Services.AddDbContext<MyDbContext>(options =>

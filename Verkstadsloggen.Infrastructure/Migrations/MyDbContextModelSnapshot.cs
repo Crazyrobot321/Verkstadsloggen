@@ -134,6 +134,32 @@ namespace Verkstadsloggen.Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.TimeLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.ToTable("TimeLogs");
+                });
+
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.Customer", b =>
                 {
                     b.HasBaseType("Verkstadsloggen.Domain.Models.Person");
@@ -170,6 +196,22 @@ namespace Verkstadsloggen.Infrastructure.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Mechanic");
+                });
+
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.TimeLog", b =>
+                {
+                    b.HasOne("Verkstadsloggen.Domain.Models.Job", "Job")
+                        .WithMany("TimeLogs")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Job", b =>
+                {
+                    b.Navigation("TimeLogs");
                 });
 
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.Customer", b =>
