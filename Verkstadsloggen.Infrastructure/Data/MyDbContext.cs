@@ -13,9 +13,6 @@ namespace Verkstadsloggen.Infrastructure.Data
         public DbSet<Mechanic> Mechanics { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<TimeLog> TimeLogs { get; set; }
-        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
-        {
-            
-        }
+        public DbSet<Comment> Comments { get; set; }
     }
 }
