@@ -14,5 +14,10 @@ namespace Verkstadsloggen.Infrastructure.Data
         public DbSet<Person> People { get; set; }
         public DbSet<TimeLog> TimeLogs { get; set; }
         public DbSet<Comment> Comments { get; set; }
+
+        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
+        {
+
+        }
     }
 }
