@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ["**"]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -30,12 +30,11 @@ jobs:
 
       - name: Test
         run: dotnet test --no-build --configuration $BUILD_CONFIGURATION
+
       - name: Vem och vad startade detta?
         env:
-          STARTAD_AV: ${{github.actor}}
-          HANDELSE: ${{github.event_name}}
-          GREN: ${{github.ref_name}}
+          STARTAD_AV: ${{ github.actor }}
+          HANDELSE: ${{ github.event_name }}
+          GREN: ${{ github.ref_name }}
         run: |
-            echo "Startad av $STARTAD_AV" - händelse: $HANDELSE - gren: $GREN"
-
-            echo "Startad av $STARTAD_AV" - händelse: $HANDELSE - gren: $GREN" >> $GITHUB_STEP_SUMMARY
+          echo "Startad av $STARTAD_AV - händelse: $HANDELSE - gren: $GREN" | tee -a $GITHUB_STEP_SUMMARY
