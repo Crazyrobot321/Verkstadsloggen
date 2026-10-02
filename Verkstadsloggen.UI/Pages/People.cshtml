@@ -8,7 +8,12 @@
 <h1>Personer</h1>
 
 <form method="post">
-
+    <div class="mb-2">
+        <select asp-for="PersonType" class="form-select">
+            <option value="Customer">Kund</option>
+            <option value="Mechanic">Mekaniker</option>
+        </select>
+    </div>
     <div class="mb-2">
         <input asp-for="FirstName"
                class="form-control"

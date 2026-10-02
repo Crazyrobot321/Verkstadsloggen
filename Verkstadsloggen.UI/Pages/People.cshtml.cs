@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Globalization;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Infrastructure.Interface;
 
@@ -30,20 +31,22 @@ public class PeopleModel : PageModel
     [BindProperty]
     public string PhoneNumber { get; set; } = string.Empty;
 
+    [BindProperty]
+    public string PersonType { get; set; } = "Customer";
+
     public async Task OnGetAsync()
     {
         People = await _personRepository.GetAllPeopleAsync();
     }
     public async Task<IActionResult> OnPostAsync()
     {
-        var person = new Customer
-        {
-            FirstName = FirstName,
-            LastName = LastName,
-            Address = Address,
-            Email = Email,
-            PhoneNumber = PhoneNumber
-        };
+        Person person = PersonType == "Customer" 
+            ? new Customer { Address = Address ?? string.Empty }
+            : new Mechanic();
+        person.FirstName = FirstName;
+        person.LastName = LastName;
+        person.Email = Email;
+        person.PhoneNumber = PhoneNumber;
 
         await _personRepository.AddPersonAsync(person);
 
