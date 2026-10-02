@@ -1,4 +1,5 @@
 ﻿@page "{id:guid}"
+@using Verkstadsloggen.Domain.Enum
 @model Verkstadsloggen.UI.Pages.JobDetails
 
 <h1>Jobbdetaljer</h1>
@@ -22,6 +23,12 @@
             <strong>ID:</strong>
             @Model.Job.Id
         </p>
+        
+        <p>
+            <strong>Mekaniker:</strong>
+            @Model.Job.Mechanic?.FirstName @Model.Job.Mechanic?.LastName
+        </p>
+
         <hr />
 
         <h3>Kommentarer</h3>
@@ -53,4 +60,13 @@
             </button>
         </form>
     </div>
+    <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@Model.Job.Id" class="d-flex gap-2 mb-3">
+        <select asp-for="NewStatus" class="form-select w-auto">
+            @foreach (var s in Enum.GetValues<JobStatus>())
+            {
+                <option value="@s">@s</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary">Uppdatera status</button>
+    </form>
 }

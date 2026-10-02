@@ -9,12 +9,15 @@ namespace Verkstadsloggen.UI.Pages
     public class JobsModel : PageModel
     {
         private readonly IJobRepository _jobRepository;
+        private readonly IMechanicRepository _mechanicRepository;
 
-        public JobsModel(IJobRepository jobRepository)
+        public JobsModel(IJobRepository jobRepository, IMechanicRepository mechanicRepository)
         {
             _jobRepository = jobRepository;
+            _mechanicRepository = mechanicRepository;
         }
         public List<Job> jobs { get; set; } = new();
+        public List<Mechanic> mechanics { get; set; } = new();
 
         [BindProperty]
         [Required]
@@ -22,25 +25,34 @@ namespace Verkstadsloggen.UI.Pages
         [BindProperty]
         [Required]
         public string Description { get; set; } = string.Empty;
+        [BindProperty]
+        public Guid? MechanicId { get; set; }
 
         public async Task OnGetAsync()
         {
-            jobs = await _jobRepository.GetAllJobsAsync();
+            await LoadAsync();
         }
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                await LoadAsync();
                 return Page();
             }
             var job = new Job
             {
                 Title = Title,
                 Description = Description,
-                Status = Domain.Enum.JobStatus.NotStarted // Set default status
+                Status = Domain.Enum.JobStatus.NotStarted, // Set default status
+                MechanicId = MechanicId
             };
             await _jobRepository.AddJobAsync(job);
             return RedirectToPage();
+        }
+        private async Task LoadAsync()
+        {
+            jobs = await _jobRepository.GetAllJobsAsync();
+            mechanics= await _mechanicRepository.GetAllMechanicsAsync();
         }
     }
 }

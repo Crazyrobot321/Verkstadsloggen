@@ -28,10 +28,10 @@ namespace Verkstadsloggen.Domain.Models
 
         public string LicensePlate { get; set; } = string.Empty;
 
-        public Guid CustomerId { get; set; }
+        public Guid? CustomerId { get; set; }
         public Customer? Customer { get; set; }
 
-        public Guid MechanicId { get; set; }
+        public Guid? MechanicId { get; set; }
         public Mechanic? Mechanic { get; set; }
 
         public List<TimeLog> TimeLogs { get; set; } = new();
