@@ -10,7 +10,17 @@
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
     <div class="mb-2">
-        <textarea asp-for="Description" class="form-control" placeholder="Enter job description"> </textarea>
+        <textarea asp-for="Description" class="form-control" placeholder="Enter job description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="mb-2">
+        <select asp-for="MechanicId" class="form-select">
+            <option value="">-- Ingen mekaniker --</option>
+            @foreach (var m in Model.mechanics)
+            {
+                <option value="@m.Id">@m.FirstName @m.LastName</option>
+            }
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

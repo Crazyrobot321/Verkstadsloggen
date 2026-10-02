@@ -23,7 +23,10 @@ namespace Verkstadsloggen.Infrastructure
         }
         public async Task<List<Job>> GetAllJobsAsync()
         {
-            return await _context.Jobs.ToListAsync();
+            return await _context.Jobs
+                .Include(j => j.Mechanic)
+                .OrderByDescending(j => j.CreatedAt)
+                .ToListAsync();
         }
         public async Task<List<Job>> GetJobsByStatusAsync(JobStatus status)
         {
@@ -33,11 +36,21 @@ namespace Verkstadsloggen.Infrastructure
         }
 
 
-        public async Task<Job> GetJobByIdAsync(Guid id)
+        public async Task<Job?> GetJobByIdAsync(Guid id)
         {
             return await _context.Jobs
-                .Include(j => j.Comments)
+                .Include(j => j.Mechanic)
                 .FirstOrDefaultAsync(j => j.Id == id);
+        }
+        public async Task<Job?> UpdateJobByIdAsync(Job job) 
+        {
+            _context.Jobs.Update(job);
+            await _context.SaveChangesAsync();
+
+            return await _context.Jobs
+                .Include(j => j.Comments)
+                .Include(j => j.Mechanic)
+                .FirstOrDefaultAsync(j => j.Id == job.Id);
         }
         public async Task AddCommentAsync(Comment comment)
         {

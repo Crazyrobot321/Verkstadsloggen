@@ -13,7 +13,8 @@ namespace Verkstadsloggen.UI
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-
+            //Register the repositories with dependency injection
+            builder.Services.AddScoped<IMechanicRepository, MechanicRepository>();
             builder.Services.AddScoped<IJobRepository, JobRepository>();
 
             builder.Services.AddDbContext<MyDbContext>(options =>
