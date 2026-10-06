@@ -14,15 +14,21 @@ namespace Verkstadsloggen.Infrastructure
             _context = context;
         }
 
-        public async Task AddPersonAsync(Person person)
+        public async Task AddPersonAsync(Customer customer)
         {
-            _context.People.Add(person);
-            await _context.SaveChangesAsync();
+            _context.Customers.Add(customer);
+            await _context.SaveChangesAsync(); 
         }
 
-        public async Task<List<Person>> GetAllPeopleAsync()
+        public async Task<List<Customer>> GetAllPeopleAsync()
         {
-            return await _context.People.ToListAsync();
+            return await _context.Customers.ToListAsync();
+        }
+
+        public async Task<Customer?> GetByLicensePlateAsync(string regnr)
+        {
+            return await _context.Customers
+                .FirstOrDefaultAsync(c => c.LicensePlate == regnr);
         }
     }
 }

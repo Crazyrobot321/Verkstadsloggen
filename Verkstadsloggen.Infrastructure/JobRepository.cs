@@ -57,5 +57,16 @@ namespace Verkstadsloggen.Infrastructure
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<Job>> GetJobsByLicensePlateAsync(string regnr)
+        {
+            return await _context.Jobs
+                .Include(j => j.Customer)
+                .Include(j => j.Mechanic)
+                .Where(j => j.Customer != null &&
+                            j.Customer.LicensePlate == regnr)
+                .OrderByDescending(j => j.CreatedAt)
+                .ToListAsync();
+        }
+
     }
 }

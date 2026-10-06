@@ -45,6 +45,41 @@ namespace Verkstadsloggen.Infrastructure.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Customer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LicensePlate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.Job", b =>
                 {
                     b.Property<Guid>("Id")
@@ -88,26 +123,11 @@ namespace Verkstadsloggen.Infrastructure.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Comment", b =>
-                {
-                    b.HasOne("Verkstadsloggen.Domain.Models.Job", "Job")
-                        .WithMany("Comments")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Job");
-                });
-            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Person", b =>
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Mechanic", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -127,11 +147,7 @@ namespace Verkstadsloggen.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("People");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Person");
-
-                    b.UseTphMappingStrategy();
+                    b.ToTable("Mechanics");
                 });
 
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.TimeLog", b =>
@@ -160,31 +176,19 @@ namespace Verkstadsloggen.Infrastructure.Migrations
                     b.ToTable("TimeLogs");
                 });
 
-            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Customer", b =>
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Comment", b =>
                 {
-                    b.HasBaseType("Verkstadsloggen.Domain.Models.Person");
+                    b.HasOne("Verkstadsloggen.Domain.Models.Job", "Job")
+                        .WithMany("Comments")
+                        .HasForeignKey("JobId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.PrimitiveCollection<string>("LicensePlates")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
-            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Mechanic", b =>
-                {
-                    b.HasBaseType("Verkstadsloggen.Domain.Models.Person");
-
-                    b.HasDiscriminator().HasValue("Mechanic");
+                    b.Navigation("Job");
                 });
 
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.Job", b =>
                 {
-                    b.Navigation("Comments");
                     b.HasOne("Verkstadsloggen.Domain.Models.Customer", "Customer")
                         .WithMany("Jobs")
                         .HasForeignKey("CustomerId");
@@ -209,14 +213,16 @@ namespace Verkstadsloggen.Infrastructure.Migrations
                     b.Navigation("Job");
                 });
 
-            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Job", b =>
-                {
-                    b.Navigation("TimeLogs");
-                });
-
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.Customer", b =>
                 {
                     b.Navigation("Jobs");
+                });
+
+            modelBuilder.Entity("Verkstadsloggen.Domain.Models.Job", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("TimeLogs");
                 });
 
             modelBuilder.Entity("Verkstadsloggen.Domain.Models.Mechanic", b =>
