@@ -10,14 +10,17 @@ namespace Verkstadsloggen.UI.Pages
     {
         private readonly IJobRepository _jobRepository;
         private readonly IMechanicRepository _mechanicRepository;
+        private readonly IPersonRepository _personRepository;
 
-        public JobsModel(IJobRepository jobRepository, IMechanicRepository mechanicRepository)
+        public JobsModel(IJobRepository jobRepository, IMechanicRepository mechanicRepository, IPersonRepository personRepository)
         {
             _jobRepository = jobRepository;
             _mechanicRepository = mechanicRepository;
+            _personRepository = personRepository;
         }
         public List<Job> jobs { get; set; } = new();
         public List<Mechanic> mechanics { get; set; } = new();
+        public List<Customer> customers { get; set; } = new();
 
         [BindProperty]
         [Required]
@@ -27,6 +30,8 @@ namespace Verkstadsloggen.UI.Pages
         public string Description { get; set; } = string.Empty;
         [BindProperty]
         public Guid? MechanicId { get; set; }
+        [BindProperty]
+        public Guid? CustomerId { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -44,7 +49,8 @@ namespace Verkstadsloggen.UI.Pages
                 Title = Title,
                 Description = Description,
                 Status = Domain.Enum.JobStatus.NotStarted, // Set default status
-                MechanicId = MechanicId
+                MechanicId = MechanicId,
+                CustomerId = CustomerId,
             };
             await _jobRepository.AddJobAsync(job);
             return RedirectToPage();
@@ -53,6 +59,8 @@ namespace Verkstadsloggen.UI.Pages
         {
             jobs = await _jobRepository.GetAllJobsAsync();
             mechanics= await _mechanicRepository.GetAllMechanicsAsync();
+            var people = await _personRepository.GetAllPeopleAsync();
+            customers = people.OfType<Customer>().ToList();
         }
     }
 }

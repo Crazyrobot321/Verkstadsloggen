@@ -24,6 +24,7 @@ namespace Verkstadsloggen.Infrastructure
         public async Task<List<Job>> GetAllJobsAsync()
         {
             return await _context.Jobs
+                .Include(j => j.Customer)
                 .Include(j => j.Mechanic)
                 .OrderByDescending(j => j.CreatedAt)
                 .ToListAsync();
@@ -31,6 +32,8 @@ namespace Verkstadsloggen.Infrastructure
         public async Task<List<Job>> GetJobsByStatusAsync(JobStatus status)
         {
             return await _context.Jobs
+                .Include(j => j.Customer)
+                .Include(j => j.Mechanic)
                 .Where(j => j.Status == status)
                 .ToListAsync();
         }
@@ -39,6 +42,8 @@ namespace Verkstadsloggen.Infrastructure
         public async Task<Job?> GetJobByIdAsync(Guid id)
         {
             return await _context.Jobs
+                .Include(j => j.Comments)
+                .Include(j => j.Customer)
                 .Include(j => j.Mechanic)
                 .FirstOrDefaultAsync(j => j.Id == id);
         }
