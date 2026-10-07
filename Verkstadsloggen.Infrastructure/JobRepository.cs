@@ -45,6 +45,7 @@ namespace Verkstadsloggen.Infrastructure
                 .Include(j => j.Comments)
                 .Include(j => j.Customer)
                 .Include(j => j.Mechanic)
+                .Include(j => j.Comments)
                 .FirstOrDefaultAsync(j => j.Id == id);
         }
         public async Task<Job?> UpdateJobByIdAsync(Job job) 
