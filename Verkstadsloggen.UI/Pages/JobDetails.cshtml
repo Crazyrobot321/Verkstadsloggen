@@ -23,6 +23,10 @@
             <strong>ID:</strong>
             @Model.Job.Id
         </p>
+        <p>
+            <strong>Kund:</strong>
+            @Model.Job.Customer?.FirstName @Model.Job.Customer?.LastName
+        </p>
         
         <p>
             <strong>Mekaniker:</strong>
