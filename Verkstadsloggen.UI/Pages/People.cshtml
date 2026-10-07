@@ -18,14 +18,16 @@
         <input asp-for="FirstName"
                class="form-control"
                placeholder="Förnamn" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <input asp-for="LastName"
                class="form-control"
                placeholder="Efternamn" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
-    
+
     <div class="mb-2">
         <input asp-for="Address"
                class="form-control"
@@ -36,12 +38,14 @@
         <input asp-for="Email"
                class="form-control"
                placeholder="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
     <div class="mb-2">
         <input asp-for="PhoneNumber"
                class="form-control"
                placeholder="Telefonnummer" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">

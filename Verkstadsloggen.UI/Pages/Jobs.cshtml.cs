@@ -43,7 +43,7 @@ namespace Verkstadsloggen.UI.Pages
             {
                 Title = Title,
                 Description = Description,
-                Status = Domain.Enum.JobStatus.NotStarted, // Set default status
+                Status = Domain.Enum.JobStatus.NotStarted,
                 MechanicId = MechanicId
             };
             await _jobRepository.AddJobAsync(job);
