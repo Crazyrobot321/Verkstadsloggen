@@ -65,7 +65,7 @@ namespace Verkstadsloggen.UI.Pages
         private async Task LoadAsync()
         {
             jobs = await _jobRepository.GetAllJobsAsync();
-            mechanics= await _mechanicRepository.GetAllMechanicsAsync();
+            mechanics = await _mechanicRepository.GetAllMechanicsAsync();
         }
     }
 }

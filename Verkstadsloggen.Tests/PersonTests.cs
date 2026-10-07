@@ -30,7 +30,7 @@ public class PersonTests
         Assert.Equal(address, customer.Address);
         Assert.Equal(email, customer.Email);
         Assert.Equal(phoneNumber, customer.PhoneNumber);
-        
+
     }
 
     [Fact]
@@ -56,6 +56,6 @@ public class PersonTests
 
         // Assert
         Assert.NotEqual(customer1.Id, customer2.Id);
-        
+
     }
 }
