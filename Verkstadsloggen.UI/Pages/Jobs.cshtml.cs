@@ -18,6 +18,7 @@ namespace Verkstadsloggen.UI.Pages
             _mechanicRepository = mechanicRepository;
             _personRepository = personRepository;
         }
+
         public List<Job> jobs { get; set; } = new();
         public List<Mechanic> mechanics { get; set; } = new();
         public List<Customer> customers { get; set; } = new();
@@ -25,9 +26,11 @@ namespace Verkstadsloggen.UI.Pages
         [BindProperty]
         [Required]
         public string Title { get; set; } = string.Empty;
+
         [BindProperty]
         [Required]
         public string Description { get; set; } = string.Empty;
+
         [BindProperty]
         public Guid? MechanicId { get; set; }
         [BindProperty]
@@ -35,23 +38,27 @@ namespace Verkstadsloggen.UI.Pages
 
         public async Task OnGetAsync()
         {
-            await LoadAsync();
+            jobs = await _jobRepository.GetAllJobsAsync();
+            mechanics = await _mechanicRepository.GetAllMechanicsAsync();
         }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                await LoadAsync();
+                mechanics = await _mechanicRepository.GetAllMechanicsAsync();
+                jobs = await _jobRepository.GetAllJobsAsync();
                 return Page();
             }
+
             var job = new Job
             {
                 Title = Title,
                 Description = Description,
                 Status = Domain.Enum.JobStatus.NotStarted, // Set default status
-                MechanicId = MechanicId,
-                CustomerId = CustomerId,
+                MechanicId = MechanicId
             };
+
             await _jobRepository.AddJobAsync(job);
             return RedirectToPage();
         }
@@ -59,8 +66,6 @@ namespace Verkstadsloggen.UI.Pages
         {
             jobs = await _jobRepository.GetAllJobsAsync();
             mechanics= await _mechanicRepository.GetAllMechanicsAsync();
-            var people = await _personRepository.GetAllPeopleAsync();
-            customers = people.OfType<Customer>().ToList();
         }
     }
 }
