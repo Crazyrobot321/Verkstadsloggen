@@ -38,3 +38,17 @@ jobs:
           GREN: ${{ github.ref_name }}
         run: |
           echo "Startad av $STARTAD_AV - händelse: $HANDELSE - gren: $GREN" | tee -a $GITHUB_STEP_SUMMARY
+  format:
+    name: Formatera kod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Format code
+        run: dotnet format --verify-no-changes --verbosity diagnostic
