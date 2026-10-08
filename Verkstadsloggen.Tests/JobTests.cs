@@ -105,4 +105,75 @@ public class JobTests
         // Assert
         Assert.Null(result);
     }
+
+    [Fact]
+    public void CreateJob_CanHaveInProgressStatus()
+    {
+        // Arrange & Act
+        var job = new Job
+        {
+            Title = "Bromsbyte",
+            Description = "Byte av bromsar fram",
+            Status = JobStatus.InProgress
+        };
+
+        // Assert
+        Assert.Equal(JobStatus.InProgress, job.Status);
+    }
+    
+    [Fact]
+    public void CreateJob_CanHaveCompletedStatus()
+    {
+        // Arrange & Act
+        var job = new Job
+        {
+            Title = "Oljebyte",
+            Description = "Byte av motorolja",
+            Status = JobStatus.Completed
+        };
+
+        // Assert
+        Assert.Equal(JobStatus.Completed, job.Status);
+    }
+
+    [Fact]
+    public void CreateJob_ReturnsDifferentIds()
+    {
+        // Arrange & Act
+        var job1 = new Job();
+        var job2 = new Job();
+
+        // Assert
+        Assert.NotEqual(job1.Id, job2.Id);
+    }
+
+    [Fact]
+    public void CreateJob_StartsWithNoComments()
+    {
+        // Arrange & Act
+        var job = new Job();
+
+        // Assert
+        Assert.Empty(job.Comments);
+    }
+
+    [Fact]
+    public void CreateJob_CanAddComments()
+    {
+        // Arrange
+        var job = new Job();
+
+        var comment = new Comment
+        {
+            Text = "Bromsarna behöver kontrolleras",
+            JobId = job.Id,
+            Job = job
+        };
+
+        // Act
+        job.Comments.Add(comment);
+
+        // Assert
+        Assert.Contains(comment, job.Comments);
+    }
 }
