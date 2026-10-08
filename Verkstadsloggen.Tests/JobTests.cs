@@ -120,7 +120,7 @@ public class JobTests
         // Assert
         Assert.Equal(JobStatus.InProgress, job.Status);
     }
-    
+
     [Fact]
     public void CreateJob_CanHaveCompletedStatus()
     {
