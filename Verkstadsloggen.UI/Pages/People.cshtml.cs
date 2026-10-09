@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Verkstadsloggen.Domain.Models;
-using Verkstadsloggen.Infrastructure.Interface;
+using Verkstadsloggen.Application.Interfaces;
 
 namespace Verkstadsloggen.UI.Pages;
 

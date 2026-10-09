@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Verkstadsloggen.Application.Interfaces;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Infrastructure.Data;
-using Verkstadsloggen.Infrastructure.Interface;
 
-namespace Verkstadsloggen.Infrastructure
+namespace Verkstadsloggen.Infrastructure.Repository
 {
     public class MechanicRepository : IMechanicRepository
     {
@@ -19,7 +16,9 @@ namespace Verkstadsloggen.Infrastructure
 
         public async Task<List<Mechanic>> GetAllMechanicsAsync()
         {
-            return await _myDbContext.Set<Mechanic>().OrderBy(m => m.FirstName).ToListAsync();
+            return await _myDbContext.Set<Mechanic>()
+                .OrderBy(m => m.FirstName)
+                .ToListAsync();
         }
     }
 }
