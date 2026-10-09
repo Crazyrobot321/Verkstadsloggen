@@ -9,7 +9,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Verkstadsloggen.Domain\Verkstadsloggen.Domain.csproj" />
-		<ProjectReference Include="..\Verkstadsloggen.Infrastructure\Verkstadsloggen.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

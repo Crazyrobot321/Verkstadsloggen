@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Verkstadsloggen.Infrastructure;
-using Verkstadsloggen.Infrastructure.Data;
-using Verkstadsloggen.Infrastructure.Interface;
 using Verkstadsloggen.Application;
+using Verkstadsloggen.Application.Interface;
+using Verkstadsloggen.Application.Interfaces;
+using Verkstadsloggen.Domain.Models;
+using Verkstadsloggen.Infrastructure.Data;
+using Verkstadsloggen.Infrastructure.Repository;
 
 namespace Verkstadsloggen.UI
 {
@@ -17,15 +20,24 @@ namespace Verkstadsloggen.UI
             //Register the repositories with dependency injection
             builder.Services.AddScoped<IMechanicRepository, MechanicRepository>();
             builder.Services.AddScoped<IJobRepository, JobRepository>();
+
             builder.Services.AddScoped<ITimeLogRepository, TimeLogRepository>();
-
-            builder.Services.AddScoped<TimeLogService>();
-
+            builder.Services.AddScoped<ITimeLogService, TimeLogService>();
 
             builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+            builder.Services.AddScoped<IPersonService, PersonService>();
+
+            builder.Services
+                .AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+                    options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<MyDbContext>()
+                .AddDefaultTokenProviders()
+                .AddDefaultUI();
+
 
             builder.Services.AddDbContext<MyDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
             var app = builder.Build();
 
@@ -43,6 +55,7 @@ namespace Verkstadsloggen.UI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
