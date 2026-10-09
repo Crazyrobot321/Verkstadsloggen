@@ -7,7 +7,7 @@ namespace Verkstadsloggen.Domain.Models
         public Guid Id { get; set; } = Guid.NewGuid();
 
         public Guid JobId { get; set; }
-        public Job Job { get; set; }
+        public Job Job { get; set; } = null!;
 
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
