@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Verkstadsloggen.Application.Interfaces;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Infrastructure.Data;
-using Verkstadsloggen.Application.Interfaces;
 
 namespace Verkstadsloggen.Infrastructure.Repository
 {
@@ -14,15 +14,42 @@ namespace Verkstadsloggen.Infrastructure.Repository
             _context = context;
         }
 
+        public async Task<Person?> GetByIdAsync(Guid id)
+        {
+            return await _context.People.FindAsync(id);
+        }
+
+        public async Task<List<Person>> GetAllPeopleAsync()
+        {
+            return await _context.People
+                .OrderBy(p => p.FirstName)
+                .ThenBy(p => p.LastName)
+                .ToListAsync();
+        }
+
+        public async Task<List<Customer>> GetAllCustomersAsync()
+        {
+            return await _context.Customers
+                .OrderBy(c => c.FirstName)
+                .ThenBy(c => c.LastName)
+                .ToListAsync();
+        }
+
         public async Task AddPersonAsync(Person person)
         {
             _context.People.Add(person);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Person>> GetAllPeopleAsync()
+        public async Task SaveChangesAsync()
         {
-            return await _context.People.ToListAsync();
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletePersonAsync(Person person)
+        {
+            _context.People.Remove(person);
+            await _context.SaveChangesAsync();
         }
     }
 }

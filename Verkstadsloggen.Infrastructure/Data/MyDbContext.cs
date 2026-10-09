@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +8,7 @@ using Verkstadsloggen.Domain.Models;
 
 namespace Verkstadsloggen.Infrastructure.Data
 {
-    public class MyDbContext : DbContext
+    public class MyDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Customer> Customers { get; set; }
