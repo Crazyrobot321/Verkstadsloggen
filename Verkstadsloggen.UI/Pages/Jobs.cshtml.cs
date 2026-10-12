@@ -38,16 +38,14 @@ namespace Verkstadsloggen.UI.Pages
 
         public async Task OnGetAsync()
         {
-            jobs = await _jobRepository.GetAllJobsAsync();
-            mechanics = await _mechanicRepository.GetAllMechanicsAsync();
+            await LoadAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                mechanics = await _mechanicRepository.GetAllMechanicsAsync();
-                jobs = await _jobRepository.GetAllJobsAsync();
+                await LoadAsync();
                 return Page();
             }
 
@@ -56,16 +54,19 @@ namespace Verkstadsloggen.UI.Pages
                 Title = Title,
                 Description = Description,
                 Status = Domain.Enum.JobStatus.NotStarted, // Set default status
+                CustomerId = CustomerId,
                 MechanicId = MechanicId
             };
 
             await _jobRepository.AddJobAsync(job);
             return RedirectToPage();
         }
+
         private async Task LoadAsync()
         {
             jobs = await _jobRepository.GetAllJobsAsync();
             mechanics = await _mechanicRepository.GetAllMechanicsAsync();
+            customers = await _personRepository.GetAllCustomersAsync();
         }
     }
 }
