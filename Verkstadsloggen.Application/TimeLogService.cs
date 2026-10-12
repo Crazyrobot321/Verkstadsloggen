@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Verkstadsloggen.Application.Interfaces;
 using Verkstadsloggen.Domain.Models;
-using Verkstadsloggen.Infrastructure.Interface;
 
 namespace Verkstadsloggen.Application
 {

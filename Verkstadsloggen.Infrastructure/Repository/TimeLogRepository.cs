@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Infrastructure.Data;
-using Verkstadsloggen.Infrastructure.Interface;
+using Verkstadsloggen.Application.Interfaces;
 
-namespace Verkstadsloggen.Infrastructure
+namespace Verkstadsloggen.Infrastructure.Repository
 {
     public class TimeLogRepository : ITimeLogRepository
     {

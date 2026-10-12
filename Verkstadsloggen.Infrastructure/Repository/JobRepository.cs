@@ -5,9 +5,9 @@ using System.Text;
 using Verkstadsloggen.Domain.Enum;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Infrastructure.Data;
-using Verkstadsloggen.Infrastructure.Interface;
+using Verkstadsloggen.Application.Interfaces;
 
-namespace Verkstadsloggen.Infrastructure
+namespace Verkstadsloggen.Infrastructure.Repository
 {
     public class JobRepository : IJobRepository
     {
@@ -45,7 +45,6 @@ namespace Verkstadsloggen.Infrastructure
                 .Include(j => j.Comments)
                 .Include(j => j.Customer)
                 .Include(j => j.Mechanic)
-                .Include(j => j.Comments)
                 .FirstOrDefaultAsync(j => j.Id == id);
         }
         public async Task<Job?> UpdateJobByIdAsync(Job job)
