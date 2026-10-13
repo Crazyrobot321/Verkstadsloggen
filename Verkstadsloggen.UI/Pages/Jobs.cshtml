@@ -4,7 +4,7 @@
     ViewData["Title"] = "Jobs";
 }
 
-<!-- Sökning -->
+<!-- Sökning (alla roller) -->
 <form method="get" class="mb-4">
     <input name="search"
            class="form-control"
@@ -13,50 +13,45 @@
     <button class="btn btn-secondary mt-2">Sök</button>
 </form>
 
-<!-- Skapa nytt jobb -->
-<form method="post">
-
-    <!-- Regnummer -->
-    <div class="mb-2">
-        <input asp-for="LicensePlate" class="form-control" placeholder="Registreringsnummer" />
-        <span asp-validation-for="LicensePlate" class="text-danger"></span>
-    </div>
-
-    <div class="mb-2">
-        <input asp-for="Title" class="form-control" placeholder="Enter job title" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
-
-    <div class="mb-2">
-        <textarea asp-for="Description" class="form-control" placeholder="Enter job description"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="mb-2">
-        <select asp-for="CustomerId" class="form-select">
-            <option value="">-- Ingen kund --</option>
-            @foreach (var customer in Model.customers)
-            {
-                <option value="@customer.Id">
-                    @customer.FirstName @customer.LastName
-                </option>
-            }
-        </select>
-    </div>
-
-    <div class="mb-2">
-        <select asp-for="MechanicId" class="form-select">
-            <option value="">-- Ingen mekaniker --</option>
-            @foreach (var m in Model.mechanics)
-            {
-                <option value="@m.Id">@m.FirstName @m.LastName</option>
-            }
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
+@if (User.IsInRole("Admin"))
+{
+    <!-- Skapa nytt jobb (bara admin) -->
+    <form method="post">
+        <div class="mb-2">
+            <input asp-for="LicensePlate" class="form-control" placeholder="Registreringsnummer" />
+            <span asp-validation-for="LicensePlate" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <input asp-for="Title" class="form-control" placeholder="Enter job title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <textarea asp-for="Description" class="form-control" placeholder="Enter job description"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="mb-2">
+            <select asp-for="CustomerId" class="form-select">
+                <option value="">-- Ingen kund --</option>
+                @foreach (var customer in Model.customers)
+                {
+                    <option value="@customer.Id">
+                        @customer.FirstName @customer.LastName
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="mb-2">
+            <select asp-for="MechanicId" class="form-select">
+                <option value="">-- Ingen mekaniker --</option>
+                @foreach (var m in Model.mechanics)
+                {
+                    <option value="@m.Id">@m.FirstName @m.LastName</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+}
 
 @if (Model.jobs.Count > 0)
 {

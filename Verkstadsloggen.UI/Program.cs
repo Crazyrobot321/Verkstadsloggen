@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Verkstadsloggen.Application;
 using Verkstadsloggen.Application.Interface;
 using Verkstadsloggen.Application.Interfaces;
-using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Infrastructure.Data;
+using Verkstadsloggen.Infrastructure.Identity;
 using Verkstadsloggen.Infrastructure.Repository;
 
 namespace Verkstadsloggen.UI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +30,7 @@ namespace Verkstadsloggen.UI
             builder.Services
                 .AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
                     options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<MyDbContext>()
                 .AddDefaultTokenProviders()
                 .AddDefaultUI();
@@ -62,6 +63,12 @@ namespace Verkstadsloggen.UI
             app.MapRazorPages()
                .WithStaticAssets();
 
+            await DataSeeder.SeedIdentityAsync(app.Services);
+            if (app.Environment.IsDevelopment())
+            {
+                await DataSeeder.SeedTestDataAsync(app.Services);
+
+            }
             app.Run();
         }
     }

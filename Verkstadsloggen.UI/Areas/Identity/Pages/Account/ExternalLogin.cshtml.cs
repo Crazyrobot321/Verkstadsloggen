@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Verkstadsloggen.Domain.Models;
+using Verkstadsloggen.Infrastructure.Identity;
 
 namespace Verkstadsloggen.UI.Areas.Identity.Pages.Account;
 

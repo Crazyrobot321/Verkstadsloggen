@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Verkstadsloggen.Domain.Models;
+using Verkstadsloggen.Infrastructure.Identity;
 
 namespace Verkstadsloggen.Infrastructure.Data
 {

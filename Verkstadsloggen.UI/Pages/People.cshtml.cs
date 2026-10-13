@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Verkstadsloggen.UI.Pages;
 
+[Authorize(Roles = "Admin")]
 public class PeopleModel : PageModel
 {
     private readonly IPersonRepository _personRepository;
