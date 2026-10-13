@@ -5,6 +5,7 @@ using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Verkstadsloggen.Infrastructure.Identity;
 
 namespace Verkstadsloggen.UI.Pages
 {

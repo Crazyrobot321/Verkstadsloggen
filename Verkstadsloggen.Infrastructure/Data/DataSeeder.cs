@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Verkstadsloggen.Domain.Models;
+using Verkstadsloggen.Infrastructure.Identity;
 
 namespace Verkstadsloggen.Infrastructure.Data
 {

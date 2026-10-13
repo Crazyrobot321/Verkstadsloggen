@@ -19,7 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Verkstadsloggen.Application.Interface;
 using Verkstadsloggen.Application.Interfaces;
-using Verkstadsloggen.Domain.Models;
+using Verkstadsloggen.Infrastructure.Identity;
 
 namespace Verkstadsloggen.UI.Areas.Identity.Pages.Account;
 

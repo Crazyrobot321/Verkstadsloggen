@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Verkstadsloggen.Application;
 using Verkstadsloggen.Application.Interface;
 using Verkstadsloggen.Application.Interfaces;
-using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Infrastructure.Data;
+using Verkstadsloggen.Infrastructure.Identity;
 using Verkstadsloggen.Infrastructure.Repository;
 
 namespace Verkstadsloggen.UI
