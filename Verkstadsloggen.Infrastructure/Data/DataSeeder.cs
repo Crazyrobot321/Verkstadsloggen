@@ -6,9 +6,11 @@ using Verkstadsloggen.Infrastructure.Identity;
 
 namespace Verkstadsloggen.Infrastructure.Data
 {
+
+    //Moved the seeding logic to a separate class for better organization and maintainability
     public static class DataSeeder
     {
-        private static readonly string[] Roles = { "Admin", "Mechanic", "Manager", "Customer" };
+        private static string[] Roles = { "Admin", "Mechanic", "Manager", "Customer" };
 
         //roles and admin
         public static async Task SeedIdentityAsync(IServiceProvider services)
@@ -23,7 +25,7 @@ namespace Verkstadsloggen.Infrastructure.Data
                     await roleManager.CreateAsync(new IdentityRole<Guid>(role));
             }
 
-            const string adminEmail = "admin@verkstad.local";
+            var adminEmail = "admin@verkstad.local";
             if (await userManager.FindByEmailAsync(adminEmail) is null) // Create admin user if it doesn't exist
             {
                 var admin = new ApplicationUser
@@ -64,7 +66,7 @@ namespace Verkstadsloggen.Infrastructure.Data
                 if (await userManager.FindByEmailAsync(email) is not null)
                     continue;
 
-                bool isMechanic = i < 7;
+                bool isMechanic = i < 7; // First 7 are mechanics, rest are customers
                 var phone = $"070-000 00 {i + 10}";
 
                 Person person = isMechanic
