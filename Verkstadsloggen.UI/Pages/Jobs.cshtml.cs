@@ -3,20 +3,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Verkstadsloggen.UI.Pages
 {
+    [Authorize]
     public class JobsModel : PageModel
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IJobRepository _jobRepository;
         private readonly IMechanicRepository _mechanicRepository;
         private readonly IPersonRepository _personRepository;
 
-        public JobsModel(IJobRepository jobRepository, IMechanicRepository mechanicRepository, IPersonRepository personRepository)
+        public JobsModel(IJobRepository jobRepository, IMechanicRepository mechanicRepository, IPersonRepository personRepository, UserManager<ApplicationUser> userManager)
         {
             _jobRepository = jobRepository;
             _mechanicRepository = mechanicRepository;
             _personRepository = personRepository;
+            _userManager = userManager;
         }
 
         public List<Job> jobs { get; set; } = new();
@@ -43,6 +48,11 @@ namespace Verkstadsloggen.UI.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
             if (!ModelState.IsValid)
             {
                 await LoadAsync();
@@ -64,7 +74,20 @@ namespace Verkstadsloggen.UI.Pages
 
         private async Task LoadAsync()
         {
-            jobs = await _jobRepository.GetAllJobsAsync();
+            var allJobs = await _jobRepository.GetAllJobsAsync();
+
+            if (User.IsInRole("Admin"))
+            {
+                jobs = allJobs;
+            }
+            else if (User.IsInRole("Mechanic"))
+            {
+                var user = await _userManager.GetUserAsync(User);
+                jobs = user?.PersonId is null //check if the user has a PersonId, if not return an empty list 
+                    ? new List<Job>()
+                    : allJobs.Where(j => j.MechanicId == user.PersonId).ToList();
+            }
+
             mechanics = await _mechanicRepository.GetAllMechanicsAsync();
             customers = await _personRepository.GetAllCustomersAsync();
         }

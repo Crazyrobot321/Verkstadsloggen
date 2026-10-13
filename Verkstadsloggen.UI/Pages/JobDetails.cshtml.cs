@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Verkstadsloggen.Domain.Enum;
 using Verkstadsloggen.Domain.Models;
 using Verkstadsloggen.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Verkstadsloggen.UI.Pages;
 
+[Authorize]
 public class JobDetails : PageModel
 {
     private readonly IJobRepository _jobRepository;
