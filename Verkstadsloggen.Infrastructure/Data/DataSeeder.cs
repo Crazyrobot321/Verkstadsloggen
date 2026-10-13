@@ -9,7 +9,7 @@ namespace Verkstadsloggen.Infrastructure.Data
     {
         private static readonly string[] Roles = { "Admin", "Mechanic", "Manager", "Customer" };
 
-        // Roller + admin. Körs alltid.
+        //roles and admin
         public static async Task SeedIdentityAsync(IServiceProvider services)
         {
             using var scope = services.CreateScope();
@@ -23,7 +23,7 @@ namespace Verkstadsloggen.Infrastructure.Data
             }
 
             const string adminEmail = "admin@verkstad.local";
-            if (await userManager.FindByEmailAsync(adminEmail) is null)
+            if (await userManager.FindByEmailAsync(adminEmail) is null) // Create admin user if it doesn't exist
             {
                 var admin = new ApplicationUser
                 {
@@ -32,13 +32,14 @@ namespace Verkstadsloggen.Infrastructure.Data
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(admin, "Admin123!");
+                var result = await userManager.CreateAsync(admin, "Admin123!3");
                 if (result.Succeeded)
                     await userManager.AddToRoleAsync(admin, "Admin");
             }
         }
 
-        // 7 mekaniker + 13 kunder. Bara i Development.
+
+        //generates test data for mechanics and customers.
         public static async Task SeedTestDataAsync(IServiceProvider services)
         {
             using var scope = services.CreateScope();
@@ -57,10 +58,10 @@ namespace Verkstadsloggen.Infrastructure.Data
             for (int i = 0; i < names.Length; i++)
             {
                 var (first, last) = names[i];
-                var email = $"{first}.{last}@test.se".ToLowerInvariant()
-                    .Replace("ö", "o").Replace("ä", "a").Replace("å", "a");
+                var email = $"{first}.{last}@test.se".ToLowerInvariant();
 
-                if (await userManager.FindByEmailAsync(email) is not null) continue;
+                if (await userManager.FindByEmailAsync(email) is not null)
+                    continue;
 
                 bool isMechanic = i < 7;
                 var phone = $"070-000 00 {i + 10}";
