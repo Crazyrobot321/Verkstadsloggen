@@ -61,7 +61,10 @@ namespace Verkstadsloggen.Infrastructure.Data
             for (int i = 0; i < names.Length; i++)
             {
                 var (first, last) = names[i];
-                var email = $"{first}.{last}@test.se".ToLowerInvariant();
+                var email = $"{first}.{last}@test.se".ToLowerInvariant()
+                    .Replace("å", "a")
+                    .Replace("ä", "a")
+                    .Replace("ö", "o");
 
                 if (await userManager.FindByEmailAsync(email) is not null)
                     continue;
@@ -94,8 +97,14 @@ namespace Verkstadsloggen.Infrastructure.Data
                 };
 
                 var result = await userManager.CreateAsync(user, "Test123!");
-                if (result.Succeeded)
-                    await userManager.AddToRoleAsync(user, isMechanic ? "Mechanic" : "Customer");
+                if (!result.Succeeded)
+                {
+                    db.Remove(person);               // inget konto, inget spår
+                    await db.SaveChangesAsync();
+                    continue;
+                }
+
+                await userManager.AddToRoleAsync(user, isMechanic ? "Mechanic" : "Customer");
             }
         }
     }
