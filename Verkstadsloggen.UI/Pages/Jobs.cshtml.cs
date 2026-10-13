@@ -40,11 +40,23 @@ namespace Verkstadsloggen.UI.Pages
         public Guid? MechanicId { get; set; }
         [BindProperty]
         public Guid? CustomerId { get; set; }
+        [BindProperty]
+        public string LicensePlate { get; set; } = string.Empty;
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string search)
         {
             await LoadAsync();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                jobs = jobs
+                    .Where(j => j.LicensePlate != null &&
+                                j.LicensePlate.Contains(search, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
         }
+
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -65,7 +77,8 @@ namespace Verkstadsloggen.UI.Pages
                 Description = Description,
                 Status = Domain.Enum.JobStatus.NotStarted, // Set default status
                 CustomerId = CustomerId,
-                MechanicId = MechanicId
+                MechanicId = MechanicId,
+                LicensePlate = LicensePlate,
             };
 
             await _jobRepository.AddJobAsync(job);
