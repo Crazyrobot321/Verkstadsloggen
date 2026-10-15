@@ -1,96 +1,120 @@
 ﻿@page
 @model Verkstadsloggen.UI.Pages.JobsModel
+@using Verkstadsloggen.UI
+@using Verkstadsloggen.Domain.Enum
 @{
     ViewData["Title"] = "Jobs";
+    var isAdmin = User.IsInRole("Admin");
+    var formOpen = !ViewData.ModelState.IsValid;
+
+    var search = Request.Query["search"].ToString();
+    var status = Request.Query["status"].ToString();
+
+    var shownJobs = Enum.TryParse<JobStatus>(status, out var selected)
+        ? Model.jobs.Where(j => j.Status == selected).ToList()
+        : Model.jobs.ToList();
+
+    var filters = new[]
+    {
+        ("", "All"),
+        ("NotStarted", "Not Started"),
+        ("InProgress", "In Progress"),
+        ("Completed", "Completed")
+    };
 }
 
-<!-- Sökning (alla roller) -->
-<form method="get" class="mb-4">
-    <input name="search"
-           class="form-control"
-           placeholder="Sök regnr (t.ex ABC123)"
-           value="@Request.Query["search"]" />
-    <button class="btn btn-secondary mt-2">Sök</button>
-</form>
+<h1 class="h2 mb-3">Jobs</h1>
 
-@if (User.IsInRole("Admin"))
+@if (isAdmin)
 {
-    <!-- Skapa nytt jobb (bara admin) -->
-    <form method="post">
-        <div class="mb-2">
-            <input asp-for="LicensePlate" class="form-control" placeholder="Registreringsnummer" />
-            <span asp-validation-for="LicensePlate" class="text-danger"></span>
-        </div>
-        <div class="mb-2">
-            <input asp-for="Title" class="form-control" placeholder="Enter job title" />
-            <span asp-validation-for="Title" class="text-danger"></span>
-        </div>
-        <div class="mb-2">
-            <textarea asp-for="Description" class="form-control" placeholder="Enter job description"></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <div class="mb-2">
-            <select asp-for="CustomerId" class="form-select">
-                <option value="">-- Ingen kund --</option>
-                @foreach (var customer in Model.customers)
-                {
-                    <option value="@customer.Id">
-                        @customer.FirstName @customer.LastName
-                    </option>
-                }
-            </select>
-        </div>
-        <div class="mb-2">
-            <select asp-for="MechanicId" class="form-select">
-                <option value="">-- Ingen mekaniker --</option>
-                @foreach (var m in Model.mechanics)
-                {
-                    <option value="@m.Id">@m.FirstName @m.LastName</option>
-                }
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-}
-
-@if (Model.jobs.Count > 0)
-{
-    <h2>Job List</h2>
-    <ul class="list-group">
-        @foreach (var job in Model.jobs)
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-
-                    <h5>@job.Title</h5>
-
-                    <div>
-                        <strong>Regnr:</strong> @job.LicensePlate
-                    </div>
-
-                    <div>
-                        <strong>Kund:</strong>
-                        @(job.Customer != null
-                            ? $"{job.Customer.FirstName} {job.Customer.LastName}"
-                            : "Ingen kund")
-                    </div>
-
-                    <div>
-                        <strong>Mekaniker:</strong>
-                        @(job.Mechanic != null
-                            ? $"{job.Mechanic.FirstName} {job.Mechanic.LastName}"
-                            : "Ingen mekaniker")
-                    </div>
+    <details class="mb-4" open="@formOpen">
+        <summary class="btn btn-primary" style="list-style:none">New Job</summary>
+        <form method="post" class="card card-body mt-3">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="LicensePlate" class="form-label">License Plate</label>
+                    <input asp-for="LicensePlate" class="form-control text-uppercase" placeholder="ABC123" />
+                    <span asp-validation-for="LicensePlate" class="text-danger"></span>
                 </div>
+                <div class="col-md-8">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="form-control" placeholder="What needs to be done?" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="CustomerId" class="form-label">Customer</label>
+                    <select asp-for="CustomerId" class="form-select">
+                        <option value="">-- No Customer --</option>
+                        @foreach (var customer in Model.customers)
+                        {
+                            <option value="@customer.Id">@customer.FirstName @customer.LastName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="MechanicId" class="form-label">Mechanic</label>
+                    <select asp-for="MechanicId" class="form-select">
+                        <option value="">-- No Mechanic --</option>
+                        @foreach (var m in Model.mechanics)
+                        {
+                            <option value="@m.Id">@m.FirstName @m.LastName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Create Job</button>
+            </div>
+        </form>
+    </details>
+}
 
-                <a asp-page="/JobDetails" asp-route-id="@job.Id" class="btn btn-primary">
-                    Visa detaljer
-                </a>
-            </li>
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+    <form method="get" class="d-flex gap-2 flex-grow-1" style="max-width: 420px">
+        <input name="search" value="@search" class="form-control text-uppercase"
+               placeholder="Search license plate, e.g. ABC123" aria-label="Search license plate" />
+        <input type="hidden" name="status" value="@status" />
+        <button class="btn btn-outline-secondary">Search</button>
+    </form>
+    <div class="btn-group" role="group" aria-label="Filter by status">
+        @foreach (var (value, label) in filters)
+        {
+            <a asp-page="/Jobs" asp-route-search="@search" asp-route-status="@(value == "" ? null : value)"
+               class="btn btn-outline-secondary @(status == value ? "active" : "")">@label</a>
         }
-    </ul>
+    </div>
+</div>
+
+@if (shownJobs.Count > 0)
+{
+    <div class="list-group">
+        @foreach (var job in shownJobs)
+        {
+            <a asp-page="/JobDetails" asp-route-id="@job.Id" class="list-group-item list-group-item-action">
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    @if (!string.IsNullOrEmpty(job.LicensePlate))
+                    {
+                        <span class="plate"><i>S</i><b>@job.LicensePlate</b></span>
+                    }
+                    <div class="flex-grow-1" style="min-width: 200px">
+                        <div class="fw-semibold">@job.Title</div>
+                        <div class="small text-muted">
+                            @(job.Customer != null ? $"{job.Customer.FirstName} {job.Customer.LastName}" : "No Customer")
+                            · @(job.Mechanic != null ? $"{job.Mechanic.FirstName} {job.Mechanic.LastName}" : "No Mechanic")
+                        </div>
+                    </div>
+                    <span class="badge @StatusDisplay.Badge(job.Status)">@StatusDisplay.Label(job.Status)</span>
+                </div>
+            </a>
+        }
+    </div>
 }
 else
 {
-    <p>No jobs available.</p>
+    <p class="text-muted">No jobs to display.</p>
 }
