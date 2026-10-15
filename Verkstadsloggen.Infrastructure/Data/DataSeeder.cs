@@ -67,7 +67,7 @@ namespace Verkstadsloggen.Infrastructure.Data
                 if (await db.People.AnyAsync(p => p.Email == email))
                     continue;
 
-                bool isMechanic = i < 7; // De första 7 är mekaniker, resten är kunder
+                bool isMechanic = i < 7; // The first 7 names are mechanics, the rest are customers
                 var phone = $"070-000 00 {i + 10}";
 
                 Person person = isMechanic
@@ -86,7 +86,7 @@ namespace Verkstadsloggen.Infrastructure.Data
                 await db.SaveChangesAsync();
 
                 if (!isMechanic)
-                    continue; // Kunder har inget konto
+                    continue; // Customers don't need user accounts for this example
 
                 var user = new ApplicationUser
                 {
