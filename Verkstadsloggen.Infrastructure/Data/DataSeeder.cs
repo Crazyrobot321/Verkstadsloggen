@@ -10,7 +10,7 @@ namespace Verkstadsloggen.Infrastructure.Data
     //Moved the seeding logic to a separate class for better organization and maintainability
     public static class DataSeeder
     {
-        private static string[] Roles = { "Admin", "Mechanic", "Manager", "Customer" };
+        private static string[] Roles = { "Admin", "Mechanic" };
 
         //roles and admin
         public static async Task SeedIdentityAsync(IServiceProvider services)
@@ -35,7 +35,7 @@ namespace Verkstadsloggen.Infrastructure.Data
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(admin, "Admin123!3");
+                var result = await userManager.CreateAsync(admin, "Admin123!3"); //temporary password for admin
                 if (result.Succeeded)
                     await userManager.AddToRoleAsync(admin, "Admin");
             }
@@ -61,12 +61,13 @@ namespace Verkstadsloggen.Infrastructure.Data
             for (int i = 0; i < names.Length; i++)
             {
                 var (first, last) = names[i];
-                var email = $"{first}.{last}@test.se".ToLowerInvariant();
+                var email = $"{first}.{last}@test.se".ToLowerInvariant()
+                    .Replace("ö", "o").Replace("ä", "a").Replace("å", "a");
 
-                if (await userManager.FindByEmailAsync(email) is not null)
+                if (await db.People.AnyAsync(p => p.Email == email))
                     continue;
 
-                bool isMechanic = i < 7; // First 7 are mechanics, rest are customers
+                bool isMechanic = i < 7; // De första 7 är mekaniker, resten är kunder
                 var phone = $"070-000 00 {i + 10}";
 
                 Person person = isMechanic
@@ -84,6 +85,9 @@ namespace Verkstadsloggen.Infrastructure.Data
                 db.Add(person);
                 await db.SaveChangesAsync();
 
+                if (!isMechanic)
+                    continue; // Kunder har inget konto
+
                 var user = new ApplicationUser
                 {
                     UserName = email,
@@ -94,8 +98,13 @@ namespace Verkstadsloggen.Infrastructure.Data
                 };
 
                 var result = await userManager.CreateAsync(user, "Test123!");
-                if (result.Succeeded)
-                    await userManager.AddToRoleAsync(user, isMechanic ? "Mechanic" : "Customer");
+                if (!result.Succeeded)
+                {
+                    db.Remove(person);
+                    await db.SaveChangesAsync();
+                    continue;
+                }
+                await userManager.AddToRoleAsync(user, "Mechanic");
             }
         }
     }
