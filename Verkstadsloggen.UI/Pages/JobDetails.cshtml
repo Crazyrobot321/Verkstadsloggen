@@ -1,76 +1,87 @@
 ﻿@page "{id:guid}"
 @using Verkstadsloggen.Domain.Enum
+@using Verkstadsloggen.UI
 @model Verkstadsloggen.UI.Pages.JobDetails
+@{
+    ViewData["Title"] = "JobDetails";
+}
 
-<h1>Jobbdetaljer</h1>
+<a asp-page="/Jobs" class="small text-decoration-none">&larr; All jobs</a>
 
 @if (Model.Job != null)
 {
-    <div>
-        <h2>@Model.Job.Title</h2>
+    var job = Model.Job;
 
-        <p>
-            <strong>Beskrivning:</strong>
-            @Model.Job.Description
-        </p>
-
-        <p>
-            <strong>Status:</strong>
-            @Model.Job.Status
-        </p>
-
-        <p>
-            <strong>ID:</strong>
-            @Model.Job.Id
-        </p>
-        <p>
-            <strong>Kund:</strong>
-            @Model.Job.Customer?.FirstName @Model.Job.Customer?.LastName
-        </p>
-        
-        <p>
-            <strong>Mekaniker:</strong>
-            @Model.Job.Mechanic?.FirstName @Model.Job.Mechanic?.LastName
-        </p>
-
-        <hr />
-
-        <h3>Kommentarer</h3>
-
-        @if (Model.Job.Comments.Any())
+    <div class="d-flex flex-wrap align-items-center gap-3 mt-2 mb-4">
+        @if (!string.IsNullOrEmpty(job.LicensePlate))
         {
-            foreach (var comment in Model.Job.Comments.OrderByDescending(c => c.CreatedAt))
-            {
-                <div class="border rounded p-2 mb-2">
-                    <p class="mb-1">@comment.Text</p>
-                    <small class="text-muted">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+            <span class="plate fs-5"><i>S</i><b>@job.LicensePlate</b></span>
+        }
+        <h1 class="h2 mb-0">@job.Title</h1>
+        <span class="badge @StatusDisplay.Badge(job.Status)">@StatusDisplay.Label(job.Status)</span>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="h6 text-muted text-uppercase">Description</h2>
+                    <p class="mb-0">@job.Description</p>
                 </div>
-            }
-        }
-        else
-        {
-            <p>Inga kommentarer ännu.</p>
-        }
-
-        <form method="post" asp-page-handler="AddComment">
-            <div class="mb-2">
-                <textarea asp-for="NewComment"
-                          class="form-control"
-                          placeholder="Skriv en kommentar..."></textarea>
             </div>
 
-            <button type="submit" class="btn btn-primary">
-                Lägg till
-            </button>
-        </form>
-    </div>
-    <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@Model.Job.Id" class="d-flex gap-2 mb-3">
-        <select asp-for="NewStatus" class="form-select w-auto">
-            @foreach (var s in Enum.GetValues<JobStatus>())
+            <h2 class="h5">Comments</h2>
+            @if (job.Comments.Any())
             {
-                <option value="@s">@s</option>
+                foreach (var comment in job.Comments.OrderByDescending(c => c.CreatedAt))
+                {
+                    <div class="border rounded p-3 mb-2">
+                        <p class="mb-1">@comment.Text</p>
+                        <small class="text-muted">@comment.CreatedAt.ToString("d MMM yyyy HH:mm")</small>
+                    </div>
+                }
             }
-        </select>
-        <button type="submit" class="btn btn-primary">Uppdatera status</button>
-    </form>
+            else
+            {
+                <p class="text-muted">No comments yet.</p>
+            }
+
+            <form method="post" asp-page-handler="AddComment" asp-route-id="@job.Id" class="mt-3">
+                <textarea asp-for="NewComment" class="form-control mb-2" rows="3" placeholder="Write a comment..."></textarea>
+                <button type="submit" class="btn btn-primary">Add comment</button>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h2 class="h6 text-muted text-uppercase">Status</h2>
+                    <form method="post" asp-page-handler="UpdateStatus" asp-route-id="@job.Id" class="d-flex gap-2">
+                        <select asp-for="NewStatus" class="form-select">
+                            @foreach (var s in Enum.GetValues<JobStatus>())
+                            {
+                                <option value="@s">@StatusDisplay.Label(s)</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <dl class="mb-0">
+                        <dt class="small text-muted">Customer</dt>
+                        <dd>@(job.Customer != null ? $"{job.Customer.FirstName} {job.Customer.LastName}" : "No Customer")</dd>
+                        <dt class="small text-muted">Mechanic</dt>
+                        <dd>@(job.Mechanic != null ? $"{job.Mechanic.FirstName} {job.Mechanic.LastName}" : "No Mechanic")</dd>
+                        <dt class="small text-muted">Created</dt>
+                        <dd>@job.CreatedAt.ToString("d MMM yyyy")</dd>
+                        <dt class="small text-muted">ID</dt>
+                        <dd class="mb-0 small text-break">@job.Id</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 }
