@@ -23,6 +23,8 @@
 
     <div class="row g-4">
         <div class="col-lg-8">
+
+            <!-- Description -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h2 class="h6 text-muted text-uppercase">Description</h2>
@@ -30,7 +32,9 @@
                 </div>
             </div>
 
+            <!-- Comments -->
             <h2 class="h5">Comments</h2>
+
             @if (job.Comments.Any())
             {
                 foreach (var comment in job.Comments.OrderByDescending(c => c.CreatedAt))
@@ -50,9 +54,78 @@
                 <textarea asp-for="NewComment" class="form-control mb-2" rows="3" placeholder="Write a comment..."></textarea>
                 <button type="submit" class="btn btn-primary">Add comment</button>
             </form>
+
+            <!-- Time Logs -->
+            <h2 class="h5 mt-4">Time Logs</h2>
+
+            @if (Model.TimeLogs != null && Model.TimeLogs.Any())
+            {
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Description</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var log in Model.TimeLogs)
+                        {
+                            <tr>
+                                <td>@log.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@log.EndTime.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@log.Description</td>
+                                <td>
+                                    <form method="post" asp-page-handler="DeleteTimeLog" asp-route-id="@job.Id" asp-route-logId="@log.Id">
+                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No time logs yet.</p>
+            }
+
+            <!-- TimeLog Form -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h2 class="h6 text-muted text-uppercase">Add Time Log</h2>
+
+                    <form method="post" asp-page-handler="AddTimeLog" asp-route-id="@job.Id">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="LogStart" class="form-label">Start Time</label>
+                                <input asp-for="LogStart" type="datetime-local"
+                                       value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                                       class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="LogEnd" class="form-label">End Time</label>
+                                <input asp-for="LogEnd" type="datetime-local"
+                                       value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")"
+                                       class="form-control" />
+                            </div>
+                            <div class="col-12">
+                                <label asp-for="LogDescription" class="form-label">Description</label>
+                                <input asp-for="LogDescription" class="form-control" />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3">Add Time Log</button>
+                    </form>
+                </div>
+            </div>
+
         </div>
 
         <div class="col-lg-4">
+
+            <!-- Status -->
             <div class="card mb-3">
                 <div class="card-body">
                     <h2 class="h6 text-muted text-uppercase">Status</h2>
@@ -68,20 +141,25 @@
                 </div>
             </div>
 
+            <!-- Sidebar Info -->
             <div class="card">
                 <div class="card-body">
                     <dl class="mb-0">
                         <dt class="small text-muted">Customer</dt>
                         <dd>@(job.Customer != null ? $"{job.Customer.FirstName} {job.Customer.LastName}" : "No Customer")</dd>
+
                         <dt class="small text-muted">Mechanic</dt>
                         <dd>@(job.Mechanic != null ? $"{job.Mechanic.FirstName} {job.Mechanic.LastName}" : "No Mechanic")</dd>
+
                         <dt class="small text-muted">Created</dt>
                         <dd>@job.CreatedAt.ToString("d MMM yyyy")</dd>
+
                         <dt class="small text-muted">ID</dt>
                         <dd class="mb-0 small text-break">@job.Id</dd>
                     </dl>
                 </div>
             </div>
+
         </div>
     </div>
 }
